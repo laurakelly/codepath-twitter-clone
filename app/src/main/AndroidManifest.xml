@@ -48,11 +48,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.codepath.apps.restclienttemplate.TimelineActivity"
-            android:label="@string/title_activity_timeline"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".TimelineActivity">
+            android:name=".TimelineActivity"
+            android:label="@string/title_activity_timeline"/>
+        <activity android:name=".ProfileActivity">
         </activity>
     </application>
 
