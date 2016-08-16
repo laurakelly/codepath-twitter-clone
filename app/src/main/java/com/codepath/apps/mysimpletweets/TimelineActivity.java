@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,8 +22,8 @@ public class TimelineActivity extends AppCompatActivity {
     ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
     vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), TimelineActivity.this));
 
-    //TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-    //tabLayout.setupWithViewPager(vpPager);
+    TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+    tabLayout.setupWithViewPager(vpPager);
   }
 
   public class TweetsPagerAdapter extends FragmentPagerAdapter {
