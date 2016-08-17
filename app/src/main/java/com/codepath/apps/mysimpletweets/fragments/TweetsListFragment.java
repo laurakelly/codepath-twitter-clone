@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public abstract class TweetsListFragment extends Fragment {
   private ArrayList<Tweet> tweets;
   private TweetsArrayAdapter aTweets;
   private RecyclerView rvTweets;
+  private SwipeRefreshLayout swipeContainer;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,9 +61,20 @@ public abstract class TweetsListFragment extends Fragment {
         }
       }
     });
+
+    swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+    swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        aTweets.clear();
+        populateTimeline();
+        swipeContainer.setRefreshing(false);
+      }
+    });
   }
 
   protected abstract void loadMoreTweetsFromApi(long maxId);
+  protected abstract void populateTimeline();
 
   public void addAll(List<Tweet> tweets) {
     aTweets.addAll(tweets);
