@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
@@ -44,33 +43,57 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	// Each method in here is an endpoint
-	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+	public void getHomeTimeline(AsyncHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("since_id", 1);
 
+		if (maxId != 0) {
+			params.put("max_id", maxId);
+		}
+
 		getClient().get(apiUrl, params, handler);
 	}
 
-	public void getMentionsTimeline(JsonHttpResponseHandler handler) {
+	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+		getHomeTimeline(handler, 0);
+	}
+
+	public void getMentionsTimeline(AsyncHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 
+		if (maxId != 0) {
+			params.put("max_id", maxId);
+		}
+
 		getClient().get(apiUrl, params, handler);
 	}
 
-	public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+	public void getMentionsTimeline(AsyncHttpResponseHandler handler) {
+		getMentionsTimeline(handler, 0);
+	}
+
+	public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 
 		RequestParams params = new RequestParams();
 		params.put("screen_name", screenName);
 		params.put("count", 25);
 
+		if (maxId != 0) {
+			params.put("max_id", maxId);
+		}
+
 		getClient().get(apiUrl, params, handler);
+	}
+
+	public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+		getUserTimeline(screenName, handler, 0);
 	}
 
 	public void getUserInfo(AsyncHttpResponseHandler handler) {

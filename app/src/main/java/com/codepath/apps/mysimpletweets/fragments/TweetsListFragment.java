@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.codepath.apps.mysimpletweets.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by laura_kelly on 8/15/16.
  */
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
   private ArrayList<Tweet> tweets;
   private TweetsArrayAdapter aTweets;
   private RecyclerView rvTweets;
@@ -45,8 +46,22 @@ public class TweetsListFragment extends Fragment {
     rvTweets = (RecyclerView) view.findViewById(R.id.rvTweets);
     rvTweets.setAdapter(aTweets);
 
-    rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
+    LinearLayoutManager lm = new LinearLayoutManager(getContext());
+    rvTweets.setLayoutManager(lm);
+    rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(lm) {
+      @Override
+      public void onLoadMore(int page, int totalItemsCount) {
+        long maxId;
+
+        if (aTweets.getItemCount() != 0) {
+          maxId = aTweets.get(aTweets.getItemCount() - 1).getUid();
+          loadMoreTweetsFromApi(maxId);
+        }
+      }
+    });
   }
+
+  protected abstract void loadMoreTweetsFromApi(long maxId);
 
   public void addAll(List<Tweet> tweets) {
     aTweets.addAll(tweets);

@@ -57,4 +57,14 @@ public class UserTimelineFragment extends TweetsListFragment {
     userTimelineFragment.setArguments(args);
     return userTimelineFragment;
   }
+
+  @Override
+  protected void loadMoreTweetsFromApi(long maxId) {
+    client.getHomeTimeline(new JsonHttpResponseHandler() {
+      @Override
+      public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+        addAll(Tweet.fromJSONArray(json));
+      }
+    }, maxId);
+  }
 }
