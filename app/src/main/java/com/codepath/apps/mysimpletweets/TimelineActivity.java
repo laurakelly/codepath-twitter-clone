@@ -9,11 +9,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
+import com.codepath.apps.mysimpletweets.models.Tweet;
+
+import org.parceler.Parcels;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -78,5 +82,20 @@ public class TimelineActivity extends AppCompatActivity {
   public void onProfileView(MenuItem mi) {
     Intent i = new Intent(this, ProfileActivity.class);
     startActivity(i);
+  }
+
+  private final int REQUEST_CODE = 20;
+
+  public void onComposeView(MenuItem mi) {
+    Intent i = new Intent(this, ComposeActivity.class);
+    startActivityForResult(i, REQUEST_CODE);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+      Tweet composedTweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+      Log.d("DEBUG", Parcels.unwrap(data.getParcelableExtra("tweet")).toString());
+    }
   }
 }
