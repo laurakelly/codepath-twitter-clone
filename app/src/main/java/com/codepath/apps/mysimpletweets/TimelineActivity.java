@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,19 +20,23 @@ import org.parceler.Parcels;
 
 public class TimelineActivity extends AppCompatActivity {
 
+  private SmartFragmentStatePagerAdapter adapterViewPager;
+  private ViewPager vpPager;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_timeline);
 
-    ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
-    vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), TimelineActivity.this));
+    vpPager = (ViewPager) findViewById(R.id.viewpager);
+    adapterViewPager = new TweetsPagerAdapter(getSupportFragmentManager(), TimelineActivity.this);
+    vpPager.setAdapter(adapterViewPager);
 
     TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
     tabLayout.setupWithViewPager(vpPager);
   }
 
-  public class TweetsPagerAdapter extends FragmentPagerAdapter {
+  public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
     final int PAGE_COUNT = 2;
     private String tabTitles[] = { "Home", "Mentions" };
     private Context context;
@@ -51,7 +54,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     public Fragment getItem(int position) {
       if (position == 0) {
-        return new HomeTimelineFragment();
+        return HomeTimelineFragment.newInstance();
       } else if (position == 1) {
         return new MentionsTimelineFragment();
       } else {
@@ -78,7 +81,6 @@ public class TimelineActivity extends AppCompatActivity {
     return true;
   }
 
-
   public void onProfileView(MenuItem mi) {
     Intent i = new Intent(this, ProfileActivity.class);
     startActivity(i);
@@ -95,6 +97,8 @@ public class TimelineActivity extends AppCompatActivity {
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
       Tweet composedTweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+      HomeTimelineFragment homeTimelineFragment = (HomeTimelineFragment) adapterViewPager.getRegisteredFragment(0);
+      homeTimelineFragment.addTweet(composedTweet);
       Log.d("DEBUG", Parcels.unwrap(data.getParcelableExtra("tweet")).toString());
     }
   }

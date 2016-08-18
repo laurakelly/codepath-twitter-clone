@@ -87,6 +87,11 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
     this.notifyDataSetChanged();
   }
 
+  public void add(Tweet tweet) {
+    mTweets.add(0, tweet);
+    this.notifyDataSetChanged();
+  }
+
   public void clear() {
     mTweets.clear();
     notifyDataSetChanged();
