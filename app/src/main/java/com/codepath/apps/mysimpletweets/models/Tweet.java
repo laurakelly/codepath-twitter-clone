@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by laura_kelly on 8/15/16.
  */
-@Parcel
+@Parcel(analyze = Tweet.class)
 @Table(name = "Tweets")
 public class Tweet extends Model {
 
@@ -53,6 +53,10 @@ public class Tweet extends Model {
     super();
   }
 
+  public long getRemoteId() {
+    return remoteId;
+  }
+
   public static Tweet fromJSON(JSONObject jsonObject) {
     Tweet tweet = new Tweet();
 
@@ -61,6 +65,8 @@ public class Tweet extends Model {
       tweet.uid = jsonObject.getLong("id");
       tweet.createdAt = jsonObject.getString("created_at");
       tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+      tweet.user.save();
+      tweet.save();
     } catch (JSONException e) {
       e.printStackTrace();
     }

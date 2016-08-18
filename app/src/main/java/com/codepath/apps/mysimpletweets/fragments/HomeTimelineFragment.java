@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -12,6 +13,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -44,19 +47,29 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
   @Override
   protected void populateTimeline() {
-    client.getHomeTimeline(new JsonHttpResponseHandler() {
-      @Override
-      public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-        Log.d("DEBUG", json.toString());
+    if (isOnline()) {
+      client.getHomeTimeline(new JsonHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+          Log.d("DEBUG", json.toString());
 
-        addAll(Tweet.fromJSONArray(json));
-      }
+          addAll(Tweet.fromJSONArray(json));
+        }
 
-      @Override
-      public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-        Log.d("DEBUG", errorResponse.toString());
-      }
-    });
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+          Log.d("DEBUG", errorResponse.toString());
+        }
+      });
+    } else {
+      populateFromDB();
+    }
+  }
+
+  public void populateFromDB() {
+    List<Tweet> queryResults = new Select().from(Tweet.class).limit(25).execute();
+    addAll(queryResults);
+    //deletePopulated(queryResults);
   }
 
   @Override

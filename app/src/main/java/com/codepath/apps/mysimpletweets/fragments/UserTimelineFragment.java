@@ -35,20 +35,22 @@ public class UserTimelineFragment extends TweetsListFragment {
 
   @Override
   protected void populateTimeline() {
-    String screenName = getArguments().getString("screen_name");
-    client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
-      @Override
-      public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-        Log.d("DEBUG", json.toString());
+    if (isOnline()) {
+      String screenName = getArguments().getString("screen_name");
+      client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+          Log.d("DEBUG", json.toString());
 
-        addAll(Tweet.fromJSONArray(json));
-      }
+          addAll(Tweet.fromJSONArray(json));
+        }
 
-      @Override
-      public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-        Log.d("DEBUG", errorResponse.toString());
-      }
-    });
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+          Log.d("DEBUG", errorResponse.toString());
+        }
+      });
+    }
   }
 
   public static UserTimelineFragment newInstance(String screen_name) {

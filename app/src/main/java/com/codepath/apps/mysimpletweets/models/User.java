@@ -11,7 +11,7 @@ import org.parceler.Parcel;
 /**
  * Created by laura_kelly on 8/15/16.
  */
-@Parcel
+@Parcel(analyze = User.class)
 @Table(name="Users")
 public class User extends Model {
 
@@ -82,6 +82,7 @@ public class User extends Model {
       u.tagline = jsonObject.getString("description");
       u.followersCount = jsonObject.getInt("followers_count");
       u.followingCount = jsonObject.getInt("friends_count");
+      u.save();
     } catch (JSONException e) {
       e.printStackTrace();
     }

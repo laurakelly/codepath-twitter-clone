@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.activeandroid.query.Delete;
 import com.codepath.apps.mysimpletweets.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,5 +85,22 @@ public abstract class TweetsListFragment extends Fragment {
 
   public void addTweet(Tweet tweet) {
     aTweets.add(tweet);
+  }
+
+  protected void deletePopulated(List<Tweet> tweets) {
+    for (int i = 0; i < tweets.size(); i++) {
+      new Delete().from(Tweet.class).where("remote_id = ?", tweets.get(i).getRemoteId()).execute();
+    }
+  }
+
+  public boolean isOnline() {
+    Runtime runtime = Runtime.getRuntime();
+    try {
+      Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+      int     exitValue = ipProcess.waitFor();
+      return (exitValue == 0);
+    } catch (IOException e)          { e.printStackTrace(); }
+    catch (InterruptedException e) { e.printStackTrace(); }
+    return false;
   }
 }
