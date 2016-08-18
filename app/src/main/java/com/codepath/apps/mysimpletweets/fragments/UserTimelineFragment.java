@@ -35,9 +35,8 @@ public class UserTimelineFragment extends TweetsListFragment {
 
   @Override
   protected void populateTimeline() {
-    String screenName = getArguments().getString("screen_name");
-
     if (isOnline()) {
+      String screenName = getArguments().getString("screen_name");
       client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
