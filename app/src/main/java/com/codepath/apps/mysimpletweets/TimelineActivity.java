@@ -29,7 +29,8 @@ public class TimelineActivity extends AppCompatActivity {
     setContentView(R.layout.activity_timeline);
 
     vpPager = (ViewPager) findViewById(R.id.viewpager);
-    vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), TimelineActivity.this));
+    adapterViewPager = new TweetsPagerAdapter(getSupportFragmentManager(), TimelineActivity.this);
+    vpPager.setAdapter(adapterViewPager);
 
     TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
     tabLayout.setupWithViewPager(vpPager);
@@ -53,7 +54,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     public Fragment getItem(int position) {
       if (position == 0) {
-        return new HomeTimelineFragment();
+        return HomeTimelineFragment.newInstance();
       } else if (position == 1) {
         return new MentionsTimelineFragment();
       } else {
@@ -96,7 +97,8 @@ public class TimelineActivity extends AppCompatActivity {
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
       Tweet composedTweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-      Fragment currentFragment = adapterViewPager.getRegisteredFragment(vpPager.getCurrentItem());
+      HomeTimelineFragment homeTimelineFragment = (HomeTimelineFragment) adapterViewPager.getRegisteredFragment(0);
+      homeTimelineFragment.addTweet(composedTweet);
       Log.d("DEBUG", Parcels.unwrap(data.getParcelableExtra("tweet")).toString());
     }
   }
