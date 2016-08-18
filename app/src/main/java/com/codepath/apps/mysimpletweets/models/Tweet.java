@@ -1,5 +1,9 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +15,24 @@ import java.util.ArrayList;
  * Created by laura_kelly on 8/15/16.
  */
 @Parcel
-public class Tweet {
+@Table(name = "Tweets")
+public class Tweet extends Model {
+
+  @Column(name="remote_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+  private long remoteId;
+
+  @Column(name = "Body")
+  private String body;
+
+  @Column(name = "Uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+  private Long uid; // id of tweet
+
+  @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+  private User user;
+
+  @Column(name = "CreatedAt")
+  private String createdAt;
+
   public String getBody() {
     return body;
   }
@@ -24,15 +45,13 @@ public class Tweet {
     return createdAt;
   }
 
-  private String body;
-  private Long uid; // id of tweet
-
   public User getUser() {
     return user;
   }
 
-  private User user;
-  private String createdAt;
+  public Tweet() {
+    super();
+  }
 
   public static Tweet fromJSON(JSONObject jsonObject) {
     Tweet tweet = new Tweet();
