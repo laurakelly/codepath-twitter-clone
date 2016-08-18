@@ -82,7 +82,6 @@ public abstract class TweetsListFragment extends Fragment {
     aTweets.addAll(tweets);
   }
 
-
   public void addTweet(Tweet tweet) {
     aTweets.add(tweet);
   }
