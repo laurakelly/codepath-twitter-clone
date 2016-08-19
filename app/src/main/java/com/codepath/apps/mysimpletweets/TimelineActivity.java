@@ -102,4 +102,6 @@ public class TimelineActivity extends AppCompatActivity {
       Log.d("DEBUG", Parcels.unwrap(data.getParcelableExtra("tweet")).toString());
     }
   }
+
+
 }
