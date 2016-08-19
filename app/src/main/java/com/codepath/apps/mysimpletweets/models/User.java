@@ -79,6 +79,7 @@ public class User extends Model {
       u.screenName = jsonObject.getString("screen_name");
       u.profileImageUrl = jsonObject.getString("profile_image_url");
       u.uid = jsonObject.getLong("id");
+      u.remoteId = jsonObject.getLong("id");
       u.tagline = jsonObject.getString("description");
       u.followersCount = jsonObject.getInt("followers_count");
       u.followingCount = jsonObject.getInt("friends_count");
