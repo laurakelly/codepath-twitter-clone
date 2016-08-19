@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -22,27 +24,29 @@ public class ProfileActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_profile);
-    client = TwitterApplication.getRestClient();
-    client.getUserInfo(new JsonHttpResponseHandler() {
-      @Override
-      public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-        user = User.fromJSON(response);
-        getSupportActionBar().setTitle("@" + user.getScreenName());
-        populateProfileHeader(user);
+    if(isOnline()) {
+      setContentView(R.layout.activity_profile);
+
+      client = TwitterApplication.getRestClient();
+      client.getUserInfo(new JsonHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+          user = User.fromJSON(response);
+          getSupportActionBar().setTitle("@" + user.getScreenName());
+          populateProfileHeader(user);
+        }
+      });
+
+      String screenName = getIntent().getStringExtra("screen_name");
+      if (savedInstanceState == null) {
+        UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.flContainer, fragmentUserTimeline);
+
+        ft.commit();
       }
-    });
-
-    String screenName = getIntent().getStringExtra("screen_name");
-    if (savedInstanceState == null) {
-      UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
-
-      FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-      ft.replace(R.id.flContainer, fragmentUserTimeline);
-
-      ft.commit();
     }
-
   }
 
   private void populateProfileHeader(User user) {
@@ -60,5 +64,16 @@ public class ProfileActivity extends AppCompatActivity {
     Picasso.with(this)
             .load(user.getProfileImageUrl())
             .into(ivProfileImage);
+  }
+
+  public boolean isOnline() {
+    Runtime runtime = Runtime.getRuntime();
+    try {
+      Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+      int     exitValue = ipProcess.waitFor();
+      return (exitValue == 0);
+    } catch (IOException e)          { e.printStackTrace(); }
+    catch (InterruptedException e) { e.printStackTrace(); }
+    return false;
   }
 }
