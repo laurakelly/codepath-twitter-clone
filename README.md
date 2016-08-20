@@ -57,7 +57,19 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+### Composing a Tweet
+<img src='http://i.imgur.com/VBNRF3p.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### Viewing Profiles
+<img src='http://i.imgur.com/H9Q1Jsn.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### Offline
+http://imgur.com/hcxgVtX
+
+### Timeline
+http://imgur.com/bZmYrgV
+
+
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
