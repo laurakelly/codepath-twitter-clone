@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
@@ -86,6 +87,13 @@ public class TimelineActivity extends AppCompatActivity {
     startActivity(i);
   }
 
+  public void onClickProfile(View view) {
+    Intent i = new Intent(this, ProfileActivity.class);
+    String screenName = (String) view.getTag(R.string.SCREENNAME_TAG);
+    i.putExtra("screenName", screenName);
+    startActivity(i);
+  }
+
   private final int REQUEST_CODE = 20;
 
   public void onComposeView(MenuItem mi) {
@@ -102,6 +110,4 @@ public class TimelineActivity extends AppCompatActivity {
       Log.d("DEBUG", Parcels.unwrap(data.getParcelableExtra("tweet")).toString());
     }
   }
-
-
 }

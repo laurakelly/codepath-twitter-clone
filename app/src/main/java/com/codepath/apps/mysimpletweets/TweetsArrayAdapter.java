@@ -67,6 +67,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
     Tweet tweet = mTweets.get(position);
 
     ImageView ivProfileImage = viewHolder.ivProfileImage;
+    ivProfileImage.setTag(R.string.SCREENNAME_TAG, tweet.getUser().getScreenName());
     TextView tvUserName = viewHolder.tvUserName;
     TextView tvBody = viewHolder.tvBody;
     TextView tvTimestamp = viewHolder.tvTimestamp;

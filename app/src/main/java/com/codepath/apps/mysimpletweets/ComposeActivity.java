@@ -31,18 +31,11 @@ public class ComposeActivity extends AppCompatActivity {
     client.postTweet(status, new JsonHttpResponseHandler() {
       @Override
       public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-        super.onSuccess(statusCode, headers, response);
-
         Intent data = new Intent();
         Tweet composedTweet = Tweet.fromJSON(response);
         data.putExtra("tweet", Parcels.wrap(composedTweet));
         setResult(RESULT_OK, data);
         finish();
-      }
-
-      @Override
-      public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-        super.onFailure(statusCode, headers, responseString, throwable);
       }
     });
   }

@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,20 +25,37 @@ public class ProfileActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if(isOnline()) {
+    String screenName = getIntent().getStringExtra("screenName");
+
+    if (isOnline()) {
       setContentView(R.layout.activity_profile);
-
       client = TwitterApplication.getRestClient();
-      client.getUserInfo(new JsonHttpResponseHandler() {
-        @Override
-        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-          user = User.fromJSON(response);
-          getSupportActionBar().setTitle("@" + user.getScreenName());
-          populateProfileHeader(user);
-        }
-      });
 
-      String screenName = getIntent().getStringExtra("screen_name");
+      if (screenName != null) {
+        client.getUserShow(screenName, new JsonHttpResponseHandler() {
+          @Override
+          public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            user = User.fromJSON(response);
+            getSupportActionBar().setTitle("@" + user.getScreenName());
+            populateProfileHeader(user);
+          }
+
+          @Override
+          public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            Log.d("DEBUG", errorResponse.toString());
+          }
+        });
+      } else {
+        client.getUserInfo(new JsonHttpResponseHandler() {
+          @Override
+          public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            user = User.fromJSON(response);
+            getSupportActionBar().setTitle("@" + user.getScreenName());
+            populateProfileHeader(user);
+          }
+        });
+      }
+
       if (savedInstanceState == null) {
         UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
 

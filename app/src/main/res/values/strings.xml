@@ -8,5 +8,6 @@
     <string name="tagline">Tagline</string>
     <string name="name">Name</string>
     <string name="what_s_happening">What\'s happening?</string>
+    <string name="SCREENNAME_TAG">123</string>
 
 </resources>
