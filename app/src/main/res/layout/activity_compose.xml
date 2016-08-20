@@ -32,4 +32,15 @@
         android:layout_alignParentRight="true"
         android:onClick="onSubmitTweet"
         android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvCharCount"
+        android:layout_alignBaseline="@+id/btnTweet"
+        android:layout_alignBottom="@+id/btnTweet"
+        android:layout_toLeftOf="@+id/btnTweet"
+        android:layout_toStartOf="@+id/btnTweet"
+        android:layout_marginRight="5dp"/>
 </RelativeLayout>
